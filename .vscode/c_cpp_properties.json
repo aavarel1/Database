@@ -3,14 +3,19 @@
     {
       "name": "macos-clang-x64",
       "includePath": [
-        "${workspaceFolder}/**"
+        "${workspaceFolder}/**",
+        "/usr/local/include",
+        "/usr/local/include/opencv4"
       ],
-      "compilerPath": "/usr/bin/clang",
+      "compilerPath": "/usr/bin/clang++",
       "cStandard": "${default}",
-      "cppStandard": "${default}",
+      "cppStandard": "c++17",  // Set to a modern standard
       "intelliSenseMode": "macos-clang-x64",
       "compilerArgs": [
-        ""
+        "-fexceptions",    // Enable exception handling
+        "-frtti",          // Enable runtime type information
+        "-lc++",           // Link against libc++
+        "-lsqlite3"        // Link against SQLite (or adjust based on your database)
       ]
     }
   ],
