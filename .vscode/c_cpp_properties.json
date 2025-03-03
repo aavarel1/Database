@@ -3,20 +3,38 @@
     {
       "name": "macos-clang-x64",
       "includePath": [
-        "${workspaceFolder}/**",
-        "/usr/local/include",
-        "/usr/local/include/opencv4"
+        "${workspaceFolder}/**"
       ],
-      "compilerPath": "/usr/bin/clang++",
+      "defines": [],
+      "macFrameworkPath": [
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks"
+      ],
+      "compilerPath": "/usr/bin/clang",
       "cStandard": "${default}",
-      "cppStandard": "c++17",  // Set to a modern standard
-      "intelliSenseMode": "macos-clang-x64",
-      "compilerArgs": [
-        "-fexceptions",    // Enable exception handling
-        "-frtti",          // Enable runtime type information
-        "-lc++",           // Link against libc++
-        "-lsqlite3"        // Link against SQLite (or adjust based on your database)
-      ]
+      "cppStandard": "${default}",
+      "intelliSenseMode": "macos-clang-x64"
+    },
+    {
+      "name": "Linux",
+      "includePath": [
+        "${workspaceFolder}/**"
+      ],
+      "defines": [],
+      "compilerPath": "/usr/bin/g++",
+      "cStandard": "c11",
+      "cppStandard": "c++11",
+      "intelliSenseMode": "gcc-x64"
+    },
+    {
+      "name": "Win32",
+      "includePath": [
+        "${workspaceFolder}/**"
+      ],
+      "defines": [],
+      "compilerPath": "C:\\MinGW\\bin\\g++.exe",
+      "cStandard": "c11",
+      "cppStandard": "c++11",
+      "intelliSenseMode": "gcc-x86"
     }
   ],
   "version": 4
