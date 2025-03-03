@@ -1,9 +1,6 @@
 #include <iostream>
-#include <fstream>
-#include <string>
 using namespace std;
-
 int main(){
-    cout << "Database" << endl;
+    cout << "hello world" << endl;
     return 0;
 }
