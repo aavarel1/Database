@@ -2,146 +2,135 @@
 #include <fstream>
 #include <string>
 using namespace std;
+
 fstream file;
 string filename = "data.txt";
-struct Person
-{
+
+struct Person {
     string id, firstName, lastName;
-    int income;
+    float income;
 };
 
-struct Person *search(string id)
-{
-    struct Person *p2 = new Person;
+struct Person* search(string id) {
+    struct Person* p2 = new Person;
     char empId[6], firstName[15], lastName[15], incomeStr[10];
     file.clear();
     file.seekg(0, ios::beg);
-    while (file.read(empId, 5))
-    {
+    
+    while (file.read(empId, 5)) {
         empId[5] = '\0';
         p2->id = empId;
-        if (p2->id == id)
-        {
-            // Reading rest of data
-            file.read(firstName, 15); // read 15 chars
-            file.read(lastName, 15);  // read 15 chars
-            file.read(incomeStr, 10); // read 10 chars
-            // Save to structure Person
+        
+        if (p2->id == id) {
+            file.read(firstName, 15);
+            file.read(lastName, 15);
+            file.read(incomeStr, 10);
             p2->firstName = firstName;
             p2->lastName = lastName;
-            p2->income = stof(incomeStr); // convert incomeStr to float
-            return p2;                    // return pointer to Person struct
+            p2->income = stof(incomeStr);
+            return p2;
         }
-        file.seekg(40, ios::cur); // why 40?
+        file.seekg(40, ios::cur);
     }
-    return 0;
+    return nullptr;
 }
 
-void get_employee()
-{
+void get_employee() {
     string empId;
-    // Ask the user to enter the employee id to get its information, complete code below
-    // Then call the function search with the employee id as a parameter
-    // Remember the search function returns a pointer to the struct ‘Person’
-    // complete code below
-    // Check if the pointer returned is null, then print employee not found
-    // otherwise display pointer information.
+    cout << "Enter employee id: ";
+    cin >> empId;
+
+    Person* p = search(empId);
+    if (p == nullptr) {
+        cout << "Employee not found!" << endl;
+    } else {
+        cout << "Employee ID: " << p->id << endl;
+        cout << "First Name: " << p->firstName << endl;
+        cout << "Last Name: " << p->lastName << endl;
+        cout << "Income: " << p->income << endl;
+        delete p;
+    }
 }
-The function list will list all employees’ information : void list()
-{
+
+void list() {
     char id[6], firstName[15], lastName[15], incomeStr[10];
     file.clear();
-    file.seekg(0, ios::beg); // rewind file to begining
-    while (file.read(id, 5))
-    {
-        // read rest of data
+    file.seekg(0, ios::beg);
+    while (file.read(id, 5)) {
         file.read(firstName, 15);
         file.read(lastName, 15);
         file.read(incomeStr, 10);
-        // save data to Person struct
-        float income = atof(incomeStr); // convert string to float
-        // display Person struct (record)
+        
+        float income = atof(incomeStr);
+        
         cout << id << " " << firstName << " " << lastName << " " << income << endl;
     }
 }
-The function write_data will store data into the file : void write_data(Person p)
-{
-    // write data to file:
+
+void write_data(Person p) {
     file.clear();
-    file.write(p.id.c_str(), 5);                 // write 5 chars for id
-    file.write(p.firstName.c_str(), 15);         // write 15 chars for first name
-    file.write(p.lastName.c_str(), 15);          // write 15 chars for last name
-    file.write(to_string(p.income).c_str(), 10); // write 10 chars after converting to string
+    file.write(p.id.c_str(), 5);
+    file.write(p.firstName.c_str(), 15);
+    file.write(p.lastName.c_str(), 15);
+    file.write(to_string(p.income).c_str(), 10);
     file.flush();
 }
-The function new_employee, ask the user about a new employee data and call write_data to
-                               save the data into the file : void
-                                                             new_employee()
-{
+
+void new_employee() {
     string empId;
-    while (1)
-    {
+    while (true) {
         cout << "\n*** New Employee ***\n";
         cout << "Enter employee id (-1 to end): ";
         cin >> empId;
-        if (empId == "-1")
-            break; // stop when user enters -1
-        // search if the employee exist, call to search function
-        // Remember search function return a pointer to struct ‘Person’ if the employee
-        exist
-            // otherwise, it returns null pointer (i.e. zero pointer)
-            // If the employee id exist, then exit from the function by calling return.
-            // If employee id does not exist, then continue ask the user about the employee
-            // information: first name, last name, and income.
-            // complete code
-            // Save data to Person struct
-            Person p;
-        p.id = empId;
+        
+        if (empId == "-1") break;
+
+        Person* p = search(empId);
+        if (p != nullptr) {
+            cout << "Employee with this ID already exists!" << endl;
+            delete p;
+            continue;
+        }
+
+        Person pNew;
+        pNew.id = empId;
         cout << "Enter first name: ";
-        cin >> p.firstName;
+        cin >> pNew.firstName;
         cout << "Enter last name: ";
-        cin >> p.lastName;
+        cin >> pNew.lastName;
         cout << "Enter income: ";
-        cin >> p.income;
-        cout << "Saving data: ";
-        write_data(p);
+        cin >> pNew.income;
+
+        cout << "Saving data...\n";
+        write_data(pNew);
     }
 }
-Finally, we have the main : int main()
-{
-    file.open(filename, ios::in | ios::out); // open file for read and write
-    if (!file)
-    {
-        file.open(filename, ios::out); // create the file
+
+int main() {
+    file.open(filename, ios::in | ios::out);
+    if (!file) {
+        file.open(filename, ios::out);
         file.close();
         file.open(filename, ios::in | ios::out);
     }
-    // Menu:
+
     int option = -1;
-    while (1)
-    {
+    while (true) {
         cout << "*** Menu ***" << endl;
         cout << "1) New employee\n";
         cout << "2) Search employee information\n";
         cout << "3) List employee\n";
         cout << "option: ";
         cin >> option;
-        switch (option)
-        {
-        case 1:
-            new_employee();
-            break;
-        case 2:
-            get_employee();
-            break;
-        case 3:
-            list();
-            break;
-        default: // any other number will exit the menu loop
-            return 0;
+
+        switch (option) {
+            case 1: new_employee(); break;
+            case 2: get_employee(); break;
+            case 3: list(); break;
+            default: return 0;
         }
     }
-    // Close files
+
     file.close();
     return 0;
 }
